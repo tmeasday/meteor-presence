@@ -1,0 +1,8 @@
+{
+  "name": "presence",
+  "description": "A package to help track users' presence",
+  "homepage": "https://github.com/tmeasday/meteor-presence",
+  "author": "Tom Coleman",
+  "version": "0.0.1",
+  "git": "https://github.com/tmeasday/meteor-presence.git"
+}
