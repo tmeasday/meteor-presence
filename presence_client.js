@@ -4,17 +4,25 @@ PRESENCE_INTERVAL = 1000;
 //
 // This function will be called a) reactively, b) every 1 second
 //
-// The user will be decorated with the state, which will be reset to null
-// when they close the browser tab or log off
 Meteor.Presence = {
+  // The presnce will contained in, which will be reset to null
+  // when they close the browser tab or log off
   state: function() { return 'online'; },
+  
   // we get told about the sessionId by the server, track it here so we
   // overwrite the correct thing
-  sessionId: Meteor.uuid()
+  sessionId: Meteor.uuid(),
+  
+  // call this function to manually update the presence _right_ now
+  // use this if your state() function contains non-reactive elements that have 
+  // changed
+  update: function() {
+    Session.set('last-presence-set-at', new Date());
+  }
 }
 
 Meteor.setInterval(function() {
-  Session.set('last-presence-set-at', new Date());
+  Meteor.Presence.update();
 }, PRESENCE_INTERVAL);
 
 
