@@ -16,15 +16,17 @@ By default, the package will, every second, track a _browser window_'s activity.
 
 The user's online state can be tracked via the `Meteor.presences` collection, referenced by `userId`
 
-NOTE: The package doesn't publish the presences by default, you'll need to do something like
+NOTE: The package doesn't publish the presences by default, you'll need to do something like:
 ```js
 Meteor.publish('userPresence', function() {
   // Setup some filter to find the users your logged in user
   // cares about. It's unlikely that you want to publish the 
   // presences of _all_ the users in the system.
   var filter = {}; 
-    
-  return Meteor.presences.find(filter);
+  
+  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
+  // templates constantly re-render (and use bandwidth)
+  return Meteor.presences.find(filter, {fields: {state: true, userId: true}});
 });
 ```
 
