@@ -1,0 +1,1 @@
+0.1.0 -- moved over to a presence collection so we could track more than one presence per user and presences of non-logged in users

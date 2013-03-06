@@ -12,11 +12,11 @@ $ mrt add presence
 
 ## Usage
 
-By default, the package will, every second, track that a user is online. If it hasn't seen a user online within the last 10 seconds, it assumes they are offline.
+By default, the package will, every second, track a _browser window_'s activity. If it hasn't seen activity from a window in 10 seconds, it will assume that window is offline.
 
-The user's online state can be tracked via `user.presence.state`, which is set to `'online'` if they are online. 
+The user's online state can be tracked via the `Meteor.presences` collection, referenced by `userId`
 
-NOTE: The package doesn't publish the presence field of any users, you'll need to do something like
+NOTE: The package doesn't publish the presences by default, you'll need to do something like
 ```js
 Meteor.publish('userPresence', function() {
   // Setup some filter to find the users your logged in user
@@ -24,9 +24,11 @@ Meteor.publish('userPresence', function() {
   // presences of _all_ the users in the system.
   var filter = {}; 
     
-  return Meteor.users.find(filter, fields: {'presence.state': true});
+  return Meteor.presences.find(filter);
 });
 ```
+
+To use that presence, you can inspect the `Meteor.presences` collection in the client.
 
 ## Advanced Usage
 
@@ -42,3 +44,7 @@ Meteor.Presence.state = function() {
 ```
 
 Of course presence will call your function reactively, so everyone will know as soon as things change.
+
+## Contributing
+
+Please! The biggest thing right now is figuring how to write tests.
