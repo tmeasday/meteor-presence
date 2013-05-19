@@ -1,3 +1,6 @@
+0.2.0
+  - deal much better with hot-code-reload -- no more double presence.
+
 0.1.2
   - stop using upsert which is not supported
 
