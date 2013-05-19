@@ -23,11 +23,27 @@ Meteor.Presence = {
   }
 }
 
+
+// try to maintain sessionId across hot-code-reload
+if (Meteor._reload) {
+  Meteor._reload.onMigrate('presence', function () {
+    return [true, {sessionId: Meteor.Presence.sessionId}];
+  });
+
+  (function () {
+    var migrationData = Meteor._reload.migrationData('presence');
+    if (migrationData && migrationData.sessionId) {
+      Meteor.Presence.sessionId = migrationData.sessionId;
+    }
+  })();
+}
+
+// update presences every interval
 Meteor.setInterval(function() {
   Meteor.Presence.update();
 }, PRESENCE_INTERVAL);
 
-
+// this is code that actually does it.
 Meteor.autorun(function() {
   // read this, so the context is invalidated every time the interval changes
   Session.get('last-presence-set-at');
@@ -54,4 +70,3 @@ Meteor.autorun(function() {
   );
   Meteor.Presence.sessionId = Meteor.Presence.sessionId || 'waiting';
 });
-
