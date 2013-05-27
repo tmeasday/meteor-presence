@@ -12,11 +12,12 @@ Meteor.methods({
         lastSeen: new Date()
     };
     
+    var userId = _.isUndefined(Meteor.userId) ? null : Meteor.userId();
+    
     if (sessionId) {
       var update = {$set: props};
       
       // need to unset userId if it's not defined as they may have just logged out
-      var userId = Meteor.userId()
       if (userId) {
         update.$set.userId = userId;
       } else {
@@ -26,7 +27,7 @@ Meteor.methods({
       Meteor.presences.update({_id: sessionId}, update);
       return sessionId;
     } else {
-      props.userId = Meteor.userId();
+      props.userId = userId;
       return Meteor.presences.insert(props)
     }
   }
