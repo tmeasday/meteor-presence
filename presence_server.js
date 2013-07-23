@@ -14,7 +14,7 @@ Meteor.methods({
     
     var userId = _.isUndefined(Meteor.userId) ? null : Meteor.userId();
     
-    if (sessionId) {
+    if (sessionId && Meteor.presences.findOne(sessionId)) {
       var update = {$set: props};
       
       // need to unset userId if it's not defined as they may have just logged out
