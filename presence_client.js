@@ -5,9 +5,12 @@ PRESENCE_INTERVAL = 1000;
 // This function will be called a) reactively, b) every 1 second
 //
 Meteor.Presence = {
-  // The presnce will contained in, which will be reset to null
+  // The presence will contained in, which will be reset to null
   // when they close the browser tab or log off
   state: function() { return 'online'; },
+
+  // Track browser focus
+  focus: false,
   
   // we get told about the sessionId by the server, track it here so we
   // overwrite the correct thing
@@ -23,6 +26,15 @@ Meteor.Presence = {
   }
 }
 
+// Watch browser focus
+Meteor.startup(function() {
+  window.onfocus = function() {
+    Meteor.Presence.focus = true;
+  }
+  window.onblur = function() {
+    Meteor.Presence.focus = false;
+  }
+});
 
 // try to maintain sessionId across hot-code-reload
 if (Meteor._reload) {
@@ -58,7 +70,8 @@ Meteor.autorun(function() {
   
   Meteor.call('setPresence', 
     Meteor.Presence.sessionId, 
-    Meteor.Presence.state(), function(err, sessionId) {
+    Meteor.Presence.state(),
+    Meteor.Presence.focus, function(err, sessionId) {
       if (err) {
         console.log(err);
         return;
