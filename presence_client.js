@@ -10,7 +10,7 @@ Meteor.Presence = {
   state: function() { return 'online'; },
 
   // Track browser focus
-  focus: false,
+  focus: true,
   
   // we get told about the sessionId by the server, track it here so we
   // overwrite the correct thing
