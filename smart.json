@@ -3,6 +3,6 @@
   "description": "A package to help track users' presence",
   "homepage": "https://github.com/tmeasday/meteor-presence",
   "author": "Tom Coleman",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "git": "https://github.com/tmeasday/meteor-presence.git"
 }
