@@ -5,6 +5,8 @@ PRESENCE_INTERVAL = 1000;
 Meteor.methods({
   setPresence: function(sessionId, state) {
     // console.log(sessionId, state);
+    check(sessionId, String);
+    check(state, Match.Any);
     
     // we use the sessionId to tell if this is a new record or not
     var props = {
