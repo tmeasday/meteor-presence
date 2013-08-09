@@ -13,7 +13,7 @@ Meteor.Presence = {
   // overwrite the correct thing
   // XXX: should probably use a session var for this so it survives HCR
   // but it causes some complexities with loops below, so I'll skip for now.
-  sessionId: null,
+  sessionId: '',
   
   // call this function to manually update the presence _right_ now
   // use this if your state() function contains non-reactive elements that have 
@@ -60,7 +60,8 @@ Meteor.autorun(function() {
     Meteor.Presence.sessionId, 
     Meteor.Presence.state(), function(err, sessionId) {
       if (err) {
-        console.log(err);
+        console.log('setPresence returned error:', err);
+        Meteor.Presence.sessionId = '';
         return;
       }
       
