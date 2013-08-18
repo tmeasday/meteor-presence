@@ -1,3 +1,6 @@
+0.2.4 - 2013-08-18
+  - Now works with Meteor 0.6.5
+
 0.2.3 - 2013-08-08
   - Fixed problem on refresh, thanks @tlau!
 
