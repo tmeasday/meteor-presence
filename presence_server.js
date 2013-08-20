@@ -3,7 +3,7 @@ PRESENCE_INTERVAL = 1000;
 
 // a method to indicate that the user is still online
 Meteor.methods({
-  setPresence: function(sessionId, state) {
+  setPresence: function(sessionId, state, focus) {
     // console.log(sessionId, state);
     check(sessionId, String);
     check(state, Match.Any);
@@ -11,6 +11,7 @@ Meteor.methods({
     // we use the sessionId to tell if this is a new record or not
     var props = {
         state: state,
+        focus: focus,
         lastSeen: new Date()
     };
     

@@ -26,7 +26,7 @@ Meteor.publish('userPresence', function() {
   
   // ProTip: unless you need it, don't send lastSeen down as it'll make your 
   // templates constantly re-render (and use bandwidth)
-  return Meteor.presences.find(filter, {fields: {state: true, userId: true}});
+  return Meteor.presences.find(filter, {fields: {state: true, focus: true, userId: true}});
 });
 ```
 
