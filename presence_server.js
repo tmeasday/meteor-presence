@@ -34,6 +34,14 @@ Meteor.methods({
 });
 
 var interval = null;
+var INTERVAL = 1000;
+var TIMEOUT = 10000;
+if (typeof Meteor.settings !== "undefined"){
+  TIMEOUT = Meteor.settings.presenceTimeout || TIMEOUT;
+  if (typeof Meteor.settings.public !== "undefined"){
+    INTERVAL = Meteor.settings.public.presenceInterval || INTERVAL;
+  }
+}
 Meteor.Presence = {
   INTERVAL: 1000,
   TIMEOUT: 10000,
@@ -42,9 +50,9 @@ Meteor.Presence = {
       Meteor.clearInterval(interval)
     }
     interval = Meteor.setInterval(function() {
-      var since = new Date(new Date().getTime() - Meteor.Presence.TIMEOUT);
+      var since = new Date(new Date().getTime() - TIMEOUT);
       Meteor.presences.remove({lastSeen: {$lt: since}});
-    }, Meteor.Presence.INTERVAL);
+    }, INTERVAL);
   }
 };
 

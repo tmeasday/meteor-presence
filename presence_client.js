@@ -4,6 +4,10 @@
 //
 var computation = null;
 var interval = null;
+var INTERVAL = 1000;
+if (typeof Meteor.settings !== "undefined" && typeof Meteor.settings.public !== "undefined"){
+  INTERVAL = Meteor.settings.public.presenceInterval || INTERVAL;
+}
 Meteor.Presence = {
   // The presnce will contained in, which will be reset to null
   // when they close the browser tab or log off
@@ -22,14 +26,12 @@ Meteor.Presence = {
     Session.set('last-presence-set-at', new Date());
   },
 
-  INTERVAL: 1000,
-
   start: function(){
     Meteor.Presence.stop();
     // update presences every interval
     interval = Meteor.setInterval(function() {
       Meteor.Presence.update();
-    }, Meteor.Presence.INTERVAL);
+    }, INTERVAL);
     // this is code that actually does it.
     computation = Meteor.autorun(refreshPresence);
   },
@@ -96,7 +98,7 @@ if (Meteor._reload) {
     }
   })();
 }
-// wait until startup so that client code can set their own INTERVAL & state function
+// wait until startup so that client code can set their own state function
 Meteor.startup(function(){
   Meteor.Presence.start();
 });
