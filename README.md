@@ -34,6 +34,8 @@ To use that presence, you can inspect the `Meteor.presences` collection in the c
 
 ## Advanced Usage
 
+### State functions
+
 If you want to track more than just what a user is doing (but instead what they are up to), you can set a custom state function. (The default state function return just `'online'`):
 
 ```js
@@ -46,6 +48,12 @@ Meteor.Presence.state = function() {
 ```
 
 Of course presence will call your function reactively, so everyone will know as soon as things change.
+
+### Changing intervals
+
+You can use `Meteor.settings.public.presenceInterval` to control how many ms there are between sending up each presence.
+
+`Meteor.settings.presenceTimeout` controls how long it takes for a user to "disappear".
 
 ## Contributing
 
