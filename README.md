@@ -12,8 +12,6 @@ $ mrt add presence
 
 ## Usage
 
-By default, the package will, every second, track a _browser window_'s activity. If it hasn't seen activity from a window in 10 seconds, it will assume that window is offline.
-
 The user's online state can be tracked via the `Meteor.presences` collection, referenced by `userId`
 
 NOTE: The package doesn't publish the presences by default, you'll need to do something like:
@@ -24,8 +22,6 @@ Meteor.publish('userPresence', function() {
   // presences of _all_ the users in the system.
   var filter = {}; 
   
-  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
-  // templates constantly re-render (and use bandwidth)
   return Meteor.presences.find(filter, {fields: {state: true, userId: true}});
 });
 ```
@@ -48,12 +44,6 @@ Meteor.Presence.state = function() {
 ```
 
 Of course presence will call your function reactively, so everyone will know as soon as things change.
-
-### Changing intervals
-
-You can use `Meteor.settings.public.presenceInterval` to control how many ms there are between sending up each presence.
-
-`Meteor.settings.presenceTimeout` controls how long it takes for a user to "disappear".
 
 ## Contributing
 
