@@ -12,7 +12,7 @@ $ mrt add presence
 
 ## Usage
 
-The user's online state can be tracked via the `Meteor.presences` collection, referenced by `userId`
+The user's online state can be tracked via the `Presences` collection, referenced by `userId`
 
 NOTE: The package doesn't publish the presences by default, you'll need to do something like:
 ```js
@@ -22,11 +22,11 @@ Meteor.publish('userPresence', function() {
   // presences of _all_ the users in the system.
   var filter = {}; 
   
-  return Meteor.presences.find(filter, {fields: {state: true, userId: true}});
+  return Presences.find(filter, {fields: {state: true, userId: true}});
 });
 ```
 
-To use that presence, you can inspect the `Meteor.presences` collection in the client.
+To use that presence, you can inspect the `Presences` collection in the client.
 
 ## Advanced Usage
 
@@ -35,7 +35,7 @@ To use that presence, you can inspect the `Meteor.presences` collection in the c
 If you want to track more than just what a user is doing (but instead what they are up to), you can set a custom state function. (The default state function return just `'online'`):
 
 ```js
-Meteor.Presence.state = function() {
+Presence.state = function() {
   return {
     online: true,
     currentRoomId: Session.get('currentRoomId');

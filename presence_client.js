@@ -1,11 +1,13 @@
-Meteor.Presence = {};
-
-Meteor.Presence.state = function() {
+Presence = {};
+Presence.state = function() {
   return 'online';
 };
 
+// For backwards compatibilty
+Meteor.Presence = Presence;
+
 Meteor.startup(function() {
   Deps.autorun(function() {
-    Meteor.call('updatePresence', Meteor.Presence.state());
+    Meteor.call('updatePresence', Presence.state());
   });
 });
