@@ -1,3 +1,7 @@
+0.4.0 - 2013-12-17
+  - Now works using Meteor 0.6.7 connection api, immediately detects most connection/disconnections
+  - Api change, use Meteor.Presence.configure() to configure settings
+
 0.3.0 - 2013-10-14
   - Added configurability to timeouts thanks @nathan-muir!
 

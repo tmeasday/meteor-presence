@@ -12,7 +12,7 @@ $ mrt add presence
 
 ## Usage
 
-By default, the package will, every second, track a _browser window_'s activity. If it hasn't seen activity from a window in 10 seconds, it will assume that window is offline.
+By default, the package will track users connected to the Meteor server.
 
 The user's online state can be tracked via the `Meteor.presences` collection, referenced by `userId`
 
@@ -20,11 +20,15 @@ NOTE: The package doesn't publish the presences by default, you'll need to do so
 ```js
 Meteor.publish('userPresence', function() {
   // Setup some filter to find the users your logged in user
-  // cares about. It's unlikely that you want to publish the 
+  // cares about. It's unlikely that you want to publish the
   // presences of _all_ the users in the system.
-  var filter = {}; 
-  
-  // ProTip: unless you need it, don't send lastSeen down as it'll make your 
+  var filter = {
+    _id: {
+      $ne: this.connection.sessionKey // don't publish the current user
+    },
+    status: 'online' // publish only clients that called 'setPresence'
+  };
+  // ProTip: unless you need it, don't send lastSeen down as it'll make your
   // templates constantly re-render (and use bandwidth)
   return Meteor.presences.find(filter, {fields: {state: true, userId: true}});
 });
@@ -34,26 +38,76 @@ To use that presence, you can inspect the `Meteor.presences` collection in the c
 
 ## Advanced Usage
 
-### State functions
-
+### Custom State
 If you want to track more than just what a user is doing (but instead what they are up to), you can set a custom state function. (The default state function return just `'online'`):
 
 ```js
-Meteor.Presence.state = function() {
-  return {
-    online: true,
-    currentRoomId: Session.get('currentRoomId');
-  };
-}
+Meteor.Presence.configure({
+  state: function() {
+    return {
+      online: true,
+      currentRoomId: Session.get('currentRoomId');
+    }
+  }
+});
 ```
 
 Of course presence will call your function reactively, so everyone will know as soon as things change.
 
-### Changing intervals
+### Client Heartbeat
 
-You can use `Meteor.settings.public.presenceInterval` to control how many ms there are between sending up each presence.
+If you want the 'lastSeen' to update at a fixed interval, pass a heartbeat value
 
-`Meteor.settings.presenceTimeout` controls how long it takes for a user to "disappear".
+```js
+Meteor.Presence.configure({
+  heartbeat: 60000 // 60s
+});
+```
+
+### Non-Reactive State
+
+You can disable reactivity on the state function, useful when using a heartbeat only.
+
+```js
+Meteor.Presence.configure({
+  reactive: false,
+  state: myExtremelyVolatileFunction
+});
+```
+
+### Isolate State
+
+You can ensure that the reactive state function is only called when it's output is changed, by enabling isolate: true (requires isolate-value)
+
+```js
+Meteor.Presence.configure({
+  isolate: true,
+  state: function(){
+    if (Session.get('myValue') > 10){
+      return 'good';
+    } else {
+      return 'bad'
+    }
+  }
+});
+```
+
+### Clustering / Server Heartbeat
+
+If you have multiple servers - you will notice that starting a new server will clear all presences.
+
+You'll need to enable a server-heartbeat to clear presences from servers that don't respond within a heartbeat / timeout period.
+
+```js
+if (Meteor.isServer){
+  Meteor.Presence.configure({
+    heartbeat: 600000, // 10 minutes
+    timeout: 1800000 // 30 minutes
+  });
+}
+```
+
+Note: There's currently no recovery for presence in case of a timeout.
 
 ## Contributing
 
