@@ -54,8 +54,9 @@ class ClientMonitor
     return
 
   setPresence: ()=>
-    state = @readState()
-    Meteor.apply('setPresence', [state], {wait: false}, @setPresenceComplete)
+    if Meteor.status().connected
+      state = @readState()
+      Meteor.apply('setPresence', [state], {wait: false}, @setPresenceComplete)
     return
 
   readState: ()->
