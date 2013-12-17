@@ -3,10 +3,13 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use('accounts-base', ['client', 'server']);
-  api.use('session', 'client');
-  
-  api.add_files('presence_common.js', ['client', 'server']);
-  api.add_files('presence_client.js', 'client');
-  api.add_files('presence_server.js', 'server');
+  api.use('standard-app-packages');
+  api.use('coffeescript');
+  api.use('accounts-base');
+  // if we have isolate value - go for it
+  api.use('isolate-value', 'client', {weak: true});
+
+  api.add_files(['lib/collection.coffee', 'lib/heartbeat.coffee']);
+  api.add_files(['lib/client/monitor.coffee', 'lib/client/presence.coffee'], 'client');
+  api.add_files(['lib/server/monitor.coffee', 'lib/server/presence.coffee'], 'server');
 });
