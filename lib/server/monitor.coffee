@@ -47,8 +47,7 @@ class ServerMonitor
 
     #XX If this server timed out - we need to re-compute the sessionKeys for each connection
     if verify.insertedId?
-      console.log("Presence: Server Timeout - Presence lost for current connections")
-      @serverId = verify.insertedId
+      console.warn("Presence: Server Timeout - Presence lost for current connections")
 
     @serverHeartbeats.remove(lastSeen: $lt: new Date(new Date().getTime() - @options.timeout))
     serverIds = _.pluck(@serverHeartbeats.find({}).fetch(), "_id")
