@@ -1,1 +1,1 @@
-Meteor.presences = new Meteor.Collection('presences');
+Meteor.presences = new Mongo.Collection('presences');
